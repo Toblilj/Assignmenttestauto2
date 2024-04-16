@@ -3,18 +3,14 @@ package Stepdefs;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.eo.Se;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.bidi.Input;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.Assert.assertEquals;
 
 public class MyStepdefs {
@@ -65,11 +61,13 @@ public class MyStepdefs {
 
     @When("user enters valid email adress")
     public void userEntersValidEmailAdress() {
+        final String randomEmail=generateRandomEmail();
         WebElement email = driver.findElement(By.id("member_emailaddress"));
         WebElement emailConformation = driver.findElement(By.id("member_confirmemailaddress"));
-        email.sendKeys("lordalctim@gmail.com");
-        emailConformation.sendKeys("lordalctim@gmail.com");
+        email.sendKeys(randomEmail);
+        emailConformation.sendKeys(randomEmail);
     }
+
 
     @When("user enters valid password")
     public void userEntersValidPassword() {
@@ -101,17 +99,19 @@ public class MyStepdefs {
     public void anAccountIsCreated() {
         WebElement confirmButton = driver.findElement(By.name("join"));
         confirmButton.click();
+        WebElement lockerButton= driver.findElement(By.xpath("/html/body/div/div[2]/div/div/div[2]/a"));
+        String expected="GO TO MY LOCKER";
+        String actual= lockerButton.getText();
+        assertEquals(expected,actual);
     }
 
-
-    //2nd scenario
 
     @Then("a error message is shown")
     public void aErrorMessageIsShown() {
         WebElement youMust = driver.findElement(By.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div/form/div[11]/div/div[2]/div[1]/span/span"));
-        String actual= youMust.getText();
-        String expected="You must confirm that you have read and accepted our Terms and Conditions";
-        assertEquals(expected,actual);
+        String actual = youMust.getText();
+        String expected = "You must confirm that you have read and accepted our Terms and Conditions";
+        assertEquals(expected, actual);
     }
 
     @When("user enters diffrent password confirmation")
@@ -137,7 +137,7 @@ public class MyStepdefs {
     public void aLastNameIsMissingIsShown() {
         WebElement lastNameReq = driver.findElement(By.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div/form/div[5]/div[2]/div/span/span"));
         String actual = lastNameReq.getText();
-       String expected = "Last Name is required";
+        String expected = "Last Name is required";
         assertEquals(expected, actual);
     }
 
@@ -147,11 +147,13 @@ public class MyStepdefs {
         WebElement confirmButton = driver.findElement(By.name("join"));
         confirmButton.click();
     }
+
+
+    private String generateRandomEmail() {
+       return "random" + randomUUID() + "@gmail.com";
+    }
+
+
 }
 
 
-////Select dropDown = new Select(driver.findElement(By.name("name")));
-
-////dropDown.selectByValue("nameToSelect");
-
-////dropDown.selectByIndex(index);
